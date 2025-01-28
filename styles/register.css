@@ -1,0 +1,89 @@
+:root {
+  --baseColor: #606468;
+  --formGap: 0.875rem;
+  --loginBorderRadius: 0.25rem;
+  --loginColor: #eee;
+  --loginInputBackgroundColor: #3b4148;
+  --loginInputHoverBackgroundColor: #434a52;
+  --loginLabelBackgroundColor: #363b41;
+  --loginSubmitBackgroundColor: #ea4c88;
+  --loginSubmitColor: #eee;
+  --loginSubmitHoverBackgroundColor: #d44179;
+  --bodyBackgroundColor: #2c3338; /* Añadido para coherencia */
+  --bodyColor: var(--loginColor); /* Reutilización de variable */
+  --bodyFontFamily: 'Arial', sans-serif; /* Añadido para coherencia */
+  --bodyFontFamilyFallback: sans-serif; /* Añadido para coherencia */
+  --bodyFontSize: 1rem; /* Añadido para coherencia */
+  --bodyFontWeight: 400; /* Añadido para coherencia */
+  --bodyLineHeight: 1.5; /* Añadido para coherencia */
+}
+
+body {
+  background-color: var(--bodyBackgroundColor);
+  color: var(--bodyColor);
+  font-family: var(--bodyFontFamily), var(--bodyFontFamilyFallback);
+  font-size: var(--bodyFontSize);
+  font-weight: var(--bodyFontWeight);
+  line-height: var(--bodyLineHeight);
+  margin: 0;
+  min-block-size: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Centrar el contenido */
+}
+
+.grid {
+  inline-size: 90%;
+  margin-inline: auto;
+  max-inline-size: 20rem;
+}
+
+.form {
+  display: grid;
+  gap: var(--formGap);
+  width: 100%; /* Asegurar que el formulario ocupe el ancho disponible */
+}
+
+.form__field {
+  display: flex;
+  flex-direction: column; /* Mejorar la disposición de los elementos */
+}
+
+.form__input {
+  flex: 1;
+  padding: 1rem;
+  border-radius: var(--loginBorderRadius);
+  border: 1px solid var(--loginInputBackgroundColor);
+  background-color: var(--loginInputBackgroundColor);
+  color: var(--loginColor);
+  transition: background-color 0.3s, border-color 0.3s;
+}
+
+.form__input:focus {
+  background-color: var(--loginInputHoverBackgroundColor);
+  border-color: var(--loginInputHoverBackgroundColor);
+  outline: none; /* Eliminar el outline por defecto */
+}
+
+input[type="submit"] {
+  background-color: var(--loginSubmitBackgroundColor);
+  color: var(--loginSubmitColor);
+  border: none;
+  border-radius: var(--loginBorderRadius);
+  padding: 1rem;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+input[type="submit"]:hover {
+  background-color: var(--loginSubmitHoverBackgroundColor);
+}
+
+/* Mejora para etiquetas */
+.form__label {
+  background-color: var(--loginLabelBackgroundColor);
+  color: var(--loginColor);
+  padding: 0.5rem 1rem;
+  border-radius: var(--loginBorderRadius);
+  margin-bottom: 0.5rem;
+}
