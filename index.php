@@ -70,6 +70,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <p class="text--center">No tens un compte? <a href="./web/register.php">Apunta't ara</a> <svg class="icon">
         <use xlink:href="#icon-arrow-right"></use>
       </svg></p>
+      <p class="text--center"><a href="./web/resetearPassword.php">Forgot Password?</a> <svg class="icon">
+        <use xlink:href="#icon-arrow-right"></use>
+      </svg></p>
 
   </div>
 

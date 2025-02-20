@@ -1,0 +1,63 @@
+/* Estilo general */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #1e1e2f;
+    font-family: 'Poppins', sans-serif;
+    color: #ffffff;
+}
+
+/* Contenedor principal */
+.home-container {
+    text-align: center;
+    background-color: #2d2d3a;
+    padding: 40px 30px;
+    border-radius: 15px;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.6);
+    max-width: 400px;
+    width: 100%;
+    transition: transform 0.3s;
+}
+
+.home-container:hover {
+    transform: translateY(-5px);
+}
+
+/* Título */
+.home-container h1 {
+    margin-bottom: 20px;
+    font-size: 2em;
+    color: #ffffff;
+}
+
+/* Texto de bienvenida */
+.home-container p {
+    margin-bottom: 30px;
+    color: #ccc;
+    font-size: 1.1em;
+}
+
+/* Botón de cerrar sesión */
+.logout-btn {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #e75480;
+    color: #fff;
+    text-decoration: none;
+    border-radius: 10px;
+    font-weight: 600;
+    transition: background-color 0.3s;
+}
+
+.logout-btn:hover {
+    background-color: #ff5a92;
+    cursor: pointer;
+}
