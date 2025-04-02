@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'tunooapp@gmail.com';
-        $mail->Password = 'tnhe xwqc vhrx qqbg';
+        $mail->Password = 'fuln luuj zgpt tjyn';
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -46,7 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $mail->send();
         echo "Password updated! Redirecting...";
-        header("Location: ../index.php");
+        header("Location: login.php");
     } catch (Exception $e) {
         die("Error: " . $e->getMessage());
     }

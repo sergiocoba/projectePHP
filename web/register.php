@@ -1,134 +1,137 @@
-  <?php
-  require 'db.php';
-  require '../vendor/autoload.php';
-  use PHPMailer\PHPMailer\PHPMailer;
-  use PHPMailer\PHPMailer\Exception;
-  
-  if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-      $username = $_POST['username'];
-      $email = $_POST['email'];
-      $password = $_POST['password'];
-      $confirmPassword = $_POST['confirm_password'];
-      $firstName = $_POST['first_name'] ?? '';
-      $lastName = $_POST['last_name'] ?? '';
-      
-      if ($password !== $confirmPassword) {
-          die("Les contrasenyes no coincideixen.");
-      }
-  
-      $query = $pdo->prepare("SELECT * FROM users WHERE mail = ?");
-      $query->execute([$email]);
-      if ($query->fetch()) {
-          die("Aquest correu ja està registrat.");
-      }
-  
-      $activationCode = hash('sha256', random_bytes(32));
-      $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
-      
-      $insert = $pdo->prepare("INSERT INTO users (username, mail, passHash, userFirstName, userLastName, activationCode, active) VALUES (?, ?, ?, ?, ?, ?, 0)");
-      $insert->execute([$username, $email, $hashedPassword, $firstName, $lastName, $activationCode]);
-      
-      $mail = new PHPMailer(true);
-      try {
-          $mail->isSMTP();
-          $mail->Host = 'smtp.gmail.com';
-          $mail->SMTPAuth = true;
-          $mail->Username = 'tunooapp@gmail.com';
-          $mail->Password = 'tnhe xwqc vhrx qqbg';
-          $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-          $mail->Port = 587;
-          
-          $mail->setFrom('tunooapp@gmail.com', 'TUNO APP');
-          $mail->addAddress($email, $username);
-          
-          $mail->isHTML(true);
-          $mail->Subject = 'Activa el teu compte';
-          $activationLink = "http://localhost/projectePHP2/web/mailCheckAccount.php?code=$activationCode&mail=$email";
-          $mail->Body = "<h1>Benvingut!</h1><p>Fes clic aquí per activar el teu compte: <a href='$activationLink'>Active your account Now!</a></p>";
-          
-          $mail->send();
-          echo "Registre complet! Revisa el teu correu per activar el compte.";
-      } catch (Exception $e) {
-          echo "Error en enviar el correu: " . $mail->ErrorInfo;
-      }
-  }
-  
-  ?>
-  <!DOCTYPE html>
-  <html lang="ca">
-  <head>
-      <meta charset="UTF-8">
-      <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <title>Registre</title>
-      <link rel="stylesheet" href="../styles/index.css">
-  </head>
-  <body class="align">
-    <div class="grid">
-      <h1 class="text--center">Registra't</h1>
+<?php
+require 'db.php';
+require '../vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
-      <?php if (isset($error)): ?>
-          <p class="error text--center" style="color: red; font-size: 0.9rem;"><?= htmlspecialchars($error) ?></p>
-      <?php endif; ?>
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = trim($_POST['username']);
+    $email = trim($_POST['email']);
+    $password = $_POST['password'];
+    $confirmPassword = $_POST['confirm_password'];
+    $firstName = trim($_POST['first_name'] ?? '');
+    $lastName = trim($_POST['last_name'] ?? '');
+    $gender = $_POST['gender'] ?? '';
+    $attractedTo = $_POST['attracted_to'] ?? '';
+    $bio = trim($_POST['bio'] ?? '');
+    $location = trim($_POST['location'] ?? '');
+    $age = $_POST['age'] ?? null;
 
-      <form method="POST" class="form login">
-        <div class="form__field">
-          <label for="username"><svg class="icon">
-              <use xlink:href="#icon-user"></use>
-            </svg><span class="hidden">Nom d'usuari</span></label>
-          <input autocomplete="username" id="username" type="text" name="username" class="form__input" placeholder="Nom d'usuari" required>
-        </div>
+    if ($password !== $confirmPassword) {
+        die("Les contrasenyes no coincideixen.");
+    }
 
-        <div class="form__field">
-          <label for="email"><svg class="icon">
-              <use xlink:href="#icon-user"></use>
-            </svg><span class="hidden">Correu electrònic</span></label>
-          <input id="email" type="email" name="email" class="form__input" placeholder="Correu electrònic" required>
-        </div>
+    $query = $pdo->prepare("SELECT * FROM users WHERE mail = ?");
+    $query->execute([$email]);
+    if ($query->fetch()) {
+        die("Aquest correu ja està registrat.");
+    }
 
-        <div class="form__field">
-          <label for="password"><svg class="icon">
-              <use xlink:href="#icon-lock"></use>
-            </svg><span class="hidden">Contrasenya</span></label>
-          <input id="password" type="password" name="password" class="form__input" placeholder="Contrasenya" required>
-        </div>
+    $activationCode = hash('sha256', random_bytes(32));
+    $hashedPassword = password_hash($password, PASSWORD_DEFAULT);
 
-        <div class="form__field">
-          <label for="confirm_password"><svg class="icon">
-              <use xlink:href="#icon-lock"></use>
-            </svg><span class="hidden">Confirma la contrasenya</span></label>
-          <input id="confirm_password" type="password" name="confirm_password" class="form__input" placeholder="Confirma la contrasenya" required>
-        </div>
+    $profileImage = null;
+    if (!empty($_FILES['profileImage']['tmp_name'])) {
+        $imageData = file_get_contents($_FILES['profileImage']['tmp_name']);
+        $profileImage = base64_encode($imageData);
+    }
 
-        <div class="form__field">
-          <input type="text" name="first_name" class="form__input" placeholder="Nom (opcional)">
-        </div>
+    $insert = $pdo->prepare("INSERT INTO users (username, mail, passHash, userFirstName, userLastName, activationCode, active, gender, attracted_to, bio, location, age, profileImage) VALUES (?, ?, ?, ?, ?, ?, 0, ?, ?, ?, ?, ?, ?)");
+    $insert->execute([$username, $email, $hashedPassword, $firstName, $lastName, $activationCode, $gender, $attractedTo, $bio, $location, $age, $profileImage]);
+    $mail = new PHPMailer(true);
+    try {
+        $mail->isSMTP();
+        $mail->Host = 'smtp.gmail.com';
+        $mail->SMTPAuth = true;
+        $mail->Username = 'tunooapp@gmail.com';
+        $mail->Password = 'fuln luuj zgpt tjyn';
+        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+        $mail->Port = 587;
 
-        <div class="form__field">
-          <input type="text" name="last_name" class="form__input" placeholder="Cognom (opcional)">
-        </div>
+        $mail->setFrom('tunooapp@gmail.com', 'TUNO APP');
+        $mail->addAddress($email, $username);
+        $mail->isHTML(true);
+        $mail->Subject = 'Activa el teu compte';
+        $activationLink = "http://localhost/projectePHP2/web/mailCheckAccount.php?code=$activationCode&mail=$email";
 
-        <div class="form__field">
-          <input type="submit" value="Registrar">
-        </div>
-      </form>
+        $profileImageUrl = "https://drive.google.com/u/0/drive-viewer/AKGpihZNfYyRUz3QHoDj80aBCzoyXI7WQyI9IS5FD5tDr17HU7sTr17iXELzCwAjjEWnJUG5T8sE8i509PtndnD8IUnllol3ouySG14=s2560"; // Ajusta la URL según donde almacenes las imágenes
 
-      <p class="text--center">Ja tens un compte? <a href="../index.php">Inicia sessió</a> <svg class="icon">
-          <use xlink:href="#icon-arrow-right"></use>
-        </svg></p>
+        $mail->Body = "<div style='max-width: 600px; margin: auto; padding: 20px; font-family: Arial, sans-serif; background-color: #f8f9fa; text-align: center; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);'>
+            <h2 style='color: #333;'>Benvingut a TUNO APP, $username!</h2>
+            <p style='color: #555; font-size: 16px;'>Per començar a utilitzar la nostra aplicació, activa el teu compte fent clic al botó següent.</p>
+            <a href='$activationLink' style='display: inline-block; padding: 12px 24px; font-size: 18px; color: white; background-color: #ff4081; text-decoration: none; border-radius: 5px; margin-top: 15px;'>Activar el meu compte</a>
+            <p style='color: #777; font-size: 14px; margin-top: 20px;'>Si no has creat aquest compte, ignora aquest missatge.</p>
+        </div>";
 
+
+        $mail->send();
+        echo "Registre complet! Revisa el teu correu per activar el compte.";
+    } catch (Exception $e) {
+        echo "Error en enviar el correu: " . $mail->ErrorInfo;
+    }
+
+}
+?>
+
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registre</title>
+    <link rel="stylesheet" href="../styles/editProfile.css">
+    <link rel="stylesheet" href="../styles/styles.css">
+</head>
+<body>
+    <div class="profile-container">
+        <h1>Registra't</h1>
+        <form action="register.php" method="post" enctype="multipart/form-data">
+            <label for="username">Nom d'usuari:</label>
+            <input type="text" name="username" id="username" required>
+
+            <label for="email">Correu electronic:</label>
+            <input type="email" name="email" id="email" required>
+
+            <label for="password">Contrasenya:</label>
+            <input type="password" name="password" id="password" required>
+
+            <label for="confirm_password">Confirma la contrasenya:</label>
+            <input type="password" name="confirm_password" id="confirm_password" required>
+
+            <label for="first_name">Nom:</label>
+            <input type="text" name="first_name" id="first_name">
+
+            <label for="last_name">Cognom:</label>
+            <input type="text" name="last_name" id="last_name">
+
+            <label for="bio">Biografía:</label>
+            <input type="text" name="bio" id="bio">
+
+            <label for="location">Ubicació:</label>
+            <input type="text" name="location" id="location">
+
+            <label for="age">Edat:</label>
+            <input type="number" name="age" id="age">
+
+            <label for="gender">El teu sexe:</label>
+            <select name="gender" id="gender">
+                <option value="M">Home</option>
+                <option value="F">Dona</option>
+            </select>
+
+            <label for="attracted_to">Sexe que t'atrau:</label>
+            <select name="attracted_to" id="attracted_to">
+                <option value="M">Homes</option>
+                <option value="F">Dones</option>
+                <option value="B">Ambdós</option>
+            </select>
+
+            <label for="profileImage">Foto de Perfil:</label>
+            <input type="file" name="profileImage" id="profileImage" accept="image/*">
+
+            <button type="submit" class="btn">Registrar</button>
+        </form>
+        <a href="login.php" class="btn">Ja tens un compte? Inicia sessió</a>
     </div>
-
-    <svg xmlns="http://www.w3.org/2000/svg" class="icons" style="display: none;">
-      <symbol id="icon-arrow-right" viewBox="0 0 1792 1792">
-        <path d="M1600 960q0 54-37 91l-651 651q-39 37-91 37-51 0-90-37l-75-75q-38-38-38-91t38-91l293-293H245q-52 0-84.5-37.5T128 1024V896q0-53 32.5-90.5T245 768h704L656 474q-38-36-38-90t38-90l75-75q38-38 90-38 53 0 91 38l651 651q37 35 37 90z" />
-      </symbol>
-      <symbol id="icon-lock" viewBox="0 0 1792 1792">
-        <path d="M640 768h512V576q0-106-75-181t-181-75-181 75-75 181v192zm832 96v576q0 40-28 68t-68 28H416q-40 0-68-28t-28-68V864q0-40 28-68t68-28h32V576q0-184 132-316t316-132 316 132 132 316v192h32q40 0 68 28t28 68z" />
-      </symbol>
-      <symbol id="icon-user" viewBox="0 0 1792 1792">
-        <path d="M1600 1405q0 120-73 189.5t-194 69.5H459q-121 0-194-69.5T192 1405q0-53 3.5-103.5t14-109T236 1084t43-97.5 62-81 85.5-53.5T538 832q9 0 42 21.5t74.5 48 108 48T896 971t133.5-21.5 108-48 74.5-48 42-21.5q61 0 111.5 20t85.5 53.5 62 81 43 97.5 26.5 108.5 14 109 3.5 103.5zm-320-893q0 159-112.5 271.5T896 896 624.5 783.5 512 512t112.5-271.5T896 128t271.5 112.5T1280 512z" />
-      </symbol>
-    </svg>
-
-  </body>
-  </html>
+</body>
+</html>

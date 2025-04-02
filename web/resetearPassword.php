@@ -4,12 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/pass.css">
+    <link rel="stylesheet" href="../styles/styles.css">
+
     <script src="../js/pass.js"></script>
     <title>Reset Password</title>
 </head>
 <body>
 
-    <iframe id="background-frame" src="../index.php"></iframe>
+    <iframe id="background-frame" src="login.php"></iframe>
 
     <div id="overlay">
         <div class="content">
@@ -22,7 +24,7 @@
 
     <div class="row pop-up">
         <div class="box small-6 large-centered">
-            <a href="../index.php" class="close-button">&#10006;</a>
+            <a href="login.php" class="close-button">&#10006;</a>
             <h3>Resetejar la contrassenya</h3>
             <form id="resetPasswordForm" action="resetPasswordSend.php" method="POST">
                 <div class="form__field">
@@ -50,7 +52,7 @@
             .then(response => response.text())
             .then(data => {
                 alert(data);
-                window.location.href = "../index.php";
+                window.location.href = "login.php";
             })
             .catch(error => console.error("Error:", error));
         });

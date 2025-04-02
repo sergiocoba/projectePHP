@@ -2,7 +2,7 @@
 require 'db.php';
 
 if (!isset($_GET['code']) || !isset($_GET['mail'])) {
-    echo "<script>alert('Falten paràmetres d\'activació!'); window.location.href='../index.php';</script>";
+    echo "<script>alert('Falten paràmetres d\'activació!'); window.location.href='login.php';</script>";
     exit;
 }
 
@@ -18,13 +18,13 @@ try {
         $stmt = $pdo->prepare("UPDATE users SET active = 1, activationDate = NOW(), activationCode = NULL WHERE iduser = ?");
         $stmt->execute([$user['iduser']]);
 
-        echo "<script>alert('El teu compte ha estat activat correctament!'); window.location.href='../index.php';</script>";
+        echo "<script>alert('El teu compte ha estat activat correctament!'); window.location.href='login.php';</script>";
 
     } else {
-        echo "<script>alert('Codi d\'activació invàlid o compte ja activat!'); window.location.href='../index.php';</script>";
+        echo "<script>alert('Codi d\'activació invàlid o compte ja activat!'); window.location.href='login.php';</script>";
     }
 } catch (PDOException $e) {
     error_log("Error d'activació: " . $e->getMessage());
-    echo "<script>alert('Error en activar el compte. Contacta amb el suport.'); window.location.href='../index.php';</script>";
+    echo "<script>alert('Error en activar el compte. Contacta amb el suport.'); window.location.href='login.php';</script>";
 }
 ?>

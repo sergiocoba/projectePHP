@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['code']) && isset($_GET[
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <title>Restablir Contrasenya</title>
                 <link rel="stylesheet" href="../styles/resetPass.css">
+                <link rel="stylesheet" href="../styles/styles.css">
+
             </head>
             <body>
                 <div class="reset-container">
@@ -65,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'GET' && isset($_GET['code']) && isset($_GET[
             $stmt = $pdo->prepare("UPDATE users SET passHash = ?, resetPassCode = NULL, resetPassExpiry = NULL WHERE iduser = ?");
             $stmt->execute([$hashedPassword, $user['iduser']]);
 
-            echo "<script>alert('Contrasenya canviada amb èxit!'); window.location.href='../index.php';</script>";
+            echo "<script>alert('Contrasenya canviada amb èxit!'); window.location.href='login.php';</script>";
         } else {
             die("Error: codi de reset invàlid o expirat.");
         }
