@@ -11,8 +11,12 @@ document.addEventListener("DOMContentLoaded", function () {
 
     let currentChat = null;
 
-
-
+    document.addEventListener("click", function (event) {
+        if (!sidebar.contains(event.target) && !menuButton.contains(event.target)) {
+            sidebar.classList.remove("active");
+        }
+    });
+    
     function loadChats() {
         fetch("obtener_chats.php")
             .then(res => res.json())
@@ -24,6 +28,7 @@ document.addEventListener("DOMContentLoaded", function () {
             .catch(err => console.error("Error al cargar chats:", err));
     }
 
+    
     function loadMessages(userId) {
         currentChat = userId;
         fetch(`obtener_mensajes.php?receptor=${userId}`)
@@ -68,15 +73,49 @@ document.addEventListener("DOMContentLoaded", function () {
     
     chatList.addEventListener("click", function (e) {
         if (e.target.classList.contains("chat-item")) {
-            chatTitle.textContent = e.target.textContent;
-            loadMessages(e.target.dataset.id);
-            sidebar.classList.remove("active");
+            const targetUserId = e.target.dataset.id;
+            
+            fetch("check_match.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ target_id: targetUserId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.match) {
+                    chatTitle.textContent = e.target.textContent;
+                    loadMessages(targetUserId);
+                    sidebar.classList.remove("active");
+                } else {
+                    alert("No puedes chatear con este usuario porque no hay match.");
+                }
+            })
+            .catch(err => console.error("Error al verificar el match:", err));
         }
     });
-
+    
     userSuggestions.addEventListener("click", function (e) {
         if (e.target.classList.contains("user-suggestion")) {
-            loadMessages(e.target.dataset.id);
+            const targetUserId = e.target.dataset.id;
+            const targetUsername = e.target.textContent;
+    
+            fetch("check_match.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams({ target_id: targetUserId })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.match) {
+                    chatTitle.textContent = targetUsername;
+                    currentChat = targetUserId;
+                    messagesDiv.innerHTML = "<p style='color: white; text-align: center;'>Cargando mensajes...</p>";
+                    loadMessages(targetUserId);
+                } else {
+                    alert("No puedes chatear con este usuario porque no hay match.");
+                }
+            })
+            .catch(err => console.error("Error al verificar el match:", err));
         }
     });
 
@@ -89,6 +128,8 @@ document.addEventListener("DOMContentLoaded", function () {
     menuButton.addEventListener("click", function () {
         sidebar.classList.toggle("active");
     });
+
+    
 
     loadChats();
 });

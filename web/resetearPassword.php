@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/pass.css">
     <link rel="stylesheet" href="../styles/styles.css">
-
+    <link rel="shortcut icon" href="../img/icono.ico" type="image/x-icon">
     <script src="../js/pass.js"></script>
     <title>Reset Password</title>
 </head>
@@ -34,6 +34,26 @@
             </form>
         </div>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const params = new URLSearchParams(window.location.search);
+            const status = params.get("status");
+            const message = params.get("message");
+
+            if (status && message) {
+                Swal.fire({
+                    icon: status === "success" ? "success" : "error",
+                    title: status === "success" ? "Èxit!" : "Error",
+                    text: message,
+                    confirmButtonColor: "#ea4c88"
+                });
+
+                window.history.replaceState(null, "", window.location.pathname);
+            }
+        });
+    </script>
 
     <script>
         document.getElementById("sendResetEmail").addEventListener("click", function() {

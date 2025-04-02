@@ -2,8 +2,8 @@
 require 'db.php';
 require '../vendor/autoload.php';
 
-use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\PHPMailer;
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username_email'])) {
     $userInput = $_POST['username_email'];
@@ -29,7 +29,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username_email'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'tunooapp@gmail.com';
-            $mail->Password = 'tnhe xwqc vhrx qqbg';
+            $mail->Password = 'fuln luuj zgpt tjyn';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
 
@@ -39,17 +39,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username_email'])) {
             $mail->isHTML(true);
             $mail->Subject = 'Reset de contrasenya';
             $resetLink = "http://localhost/projectePHP2/web/resetPassword.php?code=$resetCode&mail=" . urlencode($user['mail']);
-            $mail->Body = "<h1>Reset de contrasenya</h1><p>Fes clic aquí per canviar la teva contrasenya: <a href='$resetLink'>Reset Password</a></p>";
+            $mail->Body = "
+            <div style='max-width: 600px; margin: auto; padding: 20px; font-family: Arial, sans-serif; background-color: #2c3338; text-align: center; border-radius: 10px; box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1); color: #eee;'>
+                <h2 style='color: #eee;'>Sol·licitud de restabliment de contrasenya</h2>
+                <p style='color: #bbb; font-size: 16px;'>Has sol·licitat restablir la teva contrasenya. Fes clic al botó següent per continuar:</p>
+                <a href='$resetLink' style='display: inline-block; padding: 12px 24px; font-size: 18px; color: white; background-color: #ea4c88; text-decoration: none; border-radius: 5px; margin-top: 15px;'>Restablir contrasenya</a>
+                <p style='color: #888; font-size: 14px; margin-top: 20px;'>Si no has sol·licitat aquest canvi, ignora aquest missatge.</p>
+            </div>";
 
             $mail->send();
-            echo "Email enviat! Revisa la teva safata d'entrada.";
+            header("Location: resetearPassword.php?status=success&message=Correu enviat! Revisa la teva safata d'entrada.");
         } catch (Exception $e) {
-            echo "Error en enviar el correu: " . $mail->ErrorInfo;
+            header("Location: resetearPassword.php?status=error&message=Error en enviar el correu.");
         }
+        exit;
     } catch (PDOException $e) {
         die("Error de connexió: " . $e->getMessage());
     }
 } else {
     die("Dades no vàlides.");
 }
-?>

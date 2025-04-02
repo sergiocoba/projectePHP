@@ -7,7 +7,6 @@ if (!isset($_SESSION['user_id'])) {
     exit;
 }
 
-// Obtener el género y la preferencia de atracción del usuario
 $stmt = $pdo->prepare("SELECT gender, attracted_to FROM users WHERE iduser = ?");
 $stmt->execute([$_SESSION['user_id']]);
 $userData = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -19,22 +18,20 @@ if (!$userData) {
 $gender = $userData['gender'];
 $attracted_to = $userData['attracted_to'];
 
-// Consulta para obtener un usuario que no haya sido likeado ni rechazado
-$sql = "SELECT iduser, username, age, bio, profileImage FROM users 
-        WHERE iduser != ? 
+$sql = "SELECT iduser, username, age, bio, profileImage FROM users
+        WHERE iduser != ?
         AND iduser NOT IN (
-            SELECT usuario2 FROM dislikes WHERE usuario1 = ?  
+            SELECT usuario2 FROM dislikes WHERE usuario1 = ?
         )
         AND iduser NOT IN (
             SELECT usuario2 FROM likes WHERE usuario1 = ?
         )
         AND iduser NOT IN (
-            SELECT usuario2 FROM `matches` WHERE usuario1 = ?  
-        ) 
+            SELECT usuario2 FROM `matches` WHERE usuario1 = ?
+        )
         AND iduser NOT IN (
-            SELECT usuario1 FROM `matches` WHERE usuario2 = ?  
+            SELECT usuario1 FROM `matches` WHERE usuario2 = ?
         )";
-
 
 if ($attracted_to === 'M') {
     $sql .= " AND gender = 'M' AND attracted_to IN ('F', 'B')";
@@ -42,22 +39,22 @@ if ($attracted_to === 'M') {
     $sql .= " AND gender = 'F' AND attracted_to IN ('M', 'B')";
 } elseif ($attracted_to === 'B') {
     $sql .= " AND (
-        (gender = 'M' AND attracted_to IN ('F', 'B')) 
-        OR 
+        (gender = 'M' AND attracted_to IN ('F', 'B'))
+        OR
         (gender = 'F' AND attracted_to IN ('M', 'B'))
     )";
 }
 
 $sql .= " ORDER BY RAND() LIMIT 1";
 $stmt = $pdo->prepare($sql);
-$stmt->execute([$_SESSION['user_id'], $_SESSION['user_id'],$_SESSION['user_id'], $_SESSION['user_id'], $_SESSION['user_id']]);
+$stmt->execute([$_SESSION['user_id'], $_SESSION['user_id'], $_SESSION['user_id'], $_SESSION['user_id'], $_SESSION['user_id']]);
 $user = $stmt->fetch(PDO::FETCH_ASSOC);
 
 $fotos = [];
 if ($user) {
     $profileImageSrc = !empty($user['profileImage']) ? 'data:image/jpeg;base64,' . $user['profileImage'] : '../img/default.jpg';
     $fotos[] = $profileImageSrc;
-    
+
     $stmtFotos = $pdo->prepare("SELECT imagen FROM publicaciones WHERE usuario_id = ?");
     $stmtFotos->execute([$user['iduser']]);
     while ($row = $stmtFotos->fetch(PDO::FETCH_ASSOC)) {
@@ -85,19 +82,19 @@ if ($user) {
         <?php if (!$user): ?>
             <h2 class='no-users-message'>No hay usuarios disponibles en este momento.</h2>
         <?php else: ?>
-            <div class="profile-card" data-user-id="<?= htmlspecialchars($user['iduser']) ?>">
+            <div class="profile-card" data-user-id="<?=htmlspecialchars($user['iduser'])?>">
                 <div class="image-container">
                     <button class="prev-btn" onclick="changeImage(-1)">&#10094;</button>
-                    <img id="profile-image" class="profile-pic" src="<?= $fotos[0]; ?>" alt="Foto del usuario">
+                    <img id="profile-image" class="profile-pic" src="<?=$fotos[0];?>" alt="Foto del usuario">
                     <button class="next-btn" onclick="changeImage(1)">&#10095;</button>
                 </div>
 
-                <h2><?= htmlspecialchars($user['username']) ?>, <?= htmlspecialchars($user['age']) ?></h2>
-                <p><?= htmlspecialchars($user['bio']) ?></p>
+                <h2><?=htmlspecialchars($user['username'])?>, <?=htmlspecialchars($user['age'])?></h2>
+                <p><?=htmlspecialchars($user['bio'])?></p>
 
                 <div class="action-buttons">
-                    <button class="dislike-btn" onclick="darDislike(<?= $user['iduser'] ?>)">❌</button>
-                    <button class="like-btn" onclick="darLike(<?= $user['iduser'] ?>)">💚</button>
+                    <button class="dislike-btn" onclick="darDislike(<?=$user['iduser']?>)"></button>
+                    <button class="like-btn" onclick="darLike(<?=$user['iduser']?>)"></button>
                 </div>
             </div>
         <?php endif; ?>
@@ -119,7 +116,7 @@ if ($user) {
                 <img src="../img/user.png" alt="Perfil">
             </a>
         </div>
-    </div>  
+    </div>
 </body>
 </html>
 
@@ -160,7 +157,7 @@ function darDislike(targetId) {
     .catch(error => console.error('Error:', error));
 }
 
-let images = <?= json_encode($fotos); ?>;
+let images = <?=json_encode($fotos);?>;
 let currentIndex = 0;
 
 function changeImage(direction) {

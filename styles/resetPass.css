@@ -1,9 +1,7 @@
-/* Estilos generales */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: 'Poppins', sans-serif;
 }
 
 body {
@@ -15,7 +13,6 @@ body {
     padding: 20px;
 }
 
-/* Contenedor principal */
 .reset-container {
     background-color: #3b4148;
     color: #fff;
@@ -32,14 +29,12 @@ body {
     transform: translateY(-5px);
 }
 
-/* Título */
 .reset-container h2 {
     margin-bottom: 25px;
     color: #ffffff;
     font-size: 1.8em;
 }
 
-/* Etiquetas e inputs */
 label {
     display: block;
     text-align: left;
@@ -65,7 +60,6 @@ input[type="password"]:focus {
     background-color: #6b7280;
 }
 
-/* Botón */
 button {
     margin-top: 20px;
     width: 100%;
@@ -84,7 +78,6 @@ button:hover {
     background-color: #ff5a92;
 }
 
-/* Responsividad */
 @media (max-width: 480px) {
     .reset-container {
         padding: 25px 20px;

@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $mail->Host = 'smtp.gmail.com';
         $mail->SMTPAuth = true;
         $mail->Username = 'tunooapp@gmail.com';
-        $mail->Password = 'fuln luuj zgpt tjyn';
+        $mail->Password = 'fuln luuj zgpt tjyn';    
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
 
@@ -65,9 +65,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 
         $mail->send();
-        echo "Registre complet! Revisa el teu correu per activar el compte.";
+        echo json_encode("Registre complet! Revisa el teu correu per activar el compte.");
     } catch (Exception $e) {
-        echo "Error en enviar el correu: " . $mail->ErrorInfo;
+        echo json_encode( "Error en enviar el correu: " . $mail->ErrorInfo);
     }
 
 }

@@ -19,7 +19,7 @@ $likeExists = $stmt->fetch();
 
 if ($likeExists) {
     $stmt = $pdo->prepare("INSERT INTO matches (usuario1, usuario2, match_key, fecha) VALUES (?, ?, ?, NOW())");
-    $stmt->execute([$menor, $mayor, "$menor-$mayor"]);
+    $stmt->execute([$menor, $mayor, "$menor-$mayor"]);  
 
     echo json_encode(["match" => true, "message" => "¡Es un match! Se ha abierto el chat."]);
 } else {

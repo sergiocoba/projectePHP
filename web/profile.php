@@ -39,6 +39,7 @@ $profileImageSrc = !empty($user['profileImage']) ? 'data:image/jpeg;base64,' . $
         <div class="profile-actions">
             <a href="editProfile.php" class="btn">Editar perfil</a>
             <a href="home.php" class="btn home-btn">Volver al Home</a>
+            <a href="resetearPassword.php" class="btn">Resetejar Password</a>
             <a href="logout.php" class="btn logout-btn">Tanca Sessió</a>
 
         </div>

@@ -3,47 +3,43 @@
     opacity: 0;
 }
 
-        /* Animación para swipe a la derecha */
 .swipe-right {
     transform: translateX(100vw) rotate(15deg);
     opacity: 0;
 }
 
 
-/* Reset básico */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-    font-family: Arial, sans-serif;
 }
 
-/* Fondo general */
 body {
-    background-color:#2c3338; /* Mismo fondo oscuro que la pantalla de login */
-    color: #ffffff; /* Texto en blanco */
+    color: #ffffff;
 }
 
-/* Contenedor principal */
 .home-container {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    height: 100vh;
+    min-height: 100vh;
     padding-top: 60px;
+    overflow: hidden;
 }
 
-/* Logo superior */
 .top-logo {
     position: fixed;
     top: 0;
     width: 100%;
-    background: white; /* Fondo igual al body */
+    background: white;
     padding: 10px;
     display: flex;
     justify-content: center;
+    z-index: 1000;
 }
+
 .no-users-message {
     text-align: center;
     font-size: 20px;
@@ -52,7 +48,7 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 60vh; /* Ajusta la altura para que se vea mejor */
+    height: 60vh;
     font-weight: bold;
 }
 
@@ -60,44 +56,44 @@ body {
     height: 80px;
 }
 
-/* Tarjeta de perfil */
 .profile-card {
     transition: transform 0.5s ease-out, opacity 0.5s ease-out;
     width: 90%;
-    max-width: 380px;
-    background: #2a2b33; /* Color de los input en la pantalla de login */
+    max-width: 400px;
+    background: #2a2b33;
     border-radius: 15px;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
     overflow: hidden;
     text-align: center;
     position: relative;
     padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-height: 75vh;
 }
 
-/* Imagen de perfil */
 .profile-pic {
     width: 100%;
-    height: 400px;
+    height: auto;
+    max-height: 300px;
     object-fit: cover;
     display: block;
     border-radius: 15px;
 }
 
-/* Nombre y edad */
 .profile-card h2 {
     font-size: 22px;
     margin: 10px 0;
     font-weight: bold;
 }
 
-/* Descripción */
 .profile-card p {
     font-size: 14px;
-    color: #cccccc; /* Un gris más claro para no contrastar demasiado */
+    color: #cccccc;
     padding: 0 15px;
 }
 
-/* Botones de acción */
 .action-buttons {
     display: flex;
     justify-content: space-around;
@@ -114,29 +110,42 @@ body {
     transition: 0.3s ease;
 }
 
-/* Botón de rechazar */
 .dislike-btn {
-    background-color: #ff4f87; /* Color del botón "Inicia Sessió" */
+    background-image: url('../img/dislike.png');
+    background-color: transparent;
     color: white;
+    background-size: cover;
+    background-position: center;
+    padding: 10px;
 }
 
-/* Botón de aceptar */
+.dislike-btn:hover {
+    background-color: #f4324b;
+}
+.like-btn:hover {
+    background-color:  #3fab5b ;
+}
 .like-btn {
-    background-color: #28c74a;
+    background-image: url('../img/like.png');
+    background-color: transparent;
     color: white;
+    background-size: cover;
+    background-position: center;
+    padding: 10px;
+    
+
 }
 
 .action-buttons button:hover {
     transform: scale(1.1);
 }
 
-/* Botón de cerrar sesión */
 .logout-btn {
     display: block;
     text-align: center;
     margin-top: 20px;
     padding: 10px 20px;
-    background-color: #ff4f87; /* Igual que el botón de iniciar sesión */
+    background-color: #ff4f87;
     color: white;
     border-radius: 5px;
     text-decoration: none;
@@ -173,12 +182,11 @@ body {
     }
 }
 
-/* Menú inferior */
 .bottom-menu {
     position: fixed;
     bottom: 0;
     width: 100%;
-    background: white; /* Color igual a los inputs */
+    background: white;
     padding: 15px 0;
     display: flex;
     justify-content: space-around;

@@ -46,6 +46,7 @@ $fotos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <br/>   
     <title>Mis Fotos</title>
+    <link rel="shortcut icon" href="../img/icono.ico" type="image/x-icon">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper/swiper-bundle.min.css">
     <link rel="stylesheet" href="../styles/styles.css">
     <link rel="stylesheet" href="../styles/mis_fotos.css">
