@@ -25,15 +25,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+<?php
+if (isset($_GET['msg'])) {
+    echo "<div class='alert'>{$_GET['msg']}</div>";
+}
+?>
 <!DOCTYPE html>
 <html lang="ca">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inici de sessió - Tuno</title>
-    <link rel="icon" href="../img/icono.ico" type="image/x-icon">
+    
     <link rel="stylesheet" href="../styles/index.css">
     <link rel="stylesheet" href="../styles/styles.css">
+    <link rel="shortcut icon" href="../img/icono.ico" type="image/x-icon">
 
 </head>
 <body class="align">

@@ -29,13 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['username_email'])) {
             $mail->Host = 'smtp.gmail.com';
             $mail->SMTPAuth = true;
             $mail->Username = 'tunooapp@gmail.com';
-            $mail->Password = 'fuln luuj zgpt tjyn';
+            $mail->Password = 'xqyp jkhs wlik vjdv'; 
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port = 587;
-
             $mail->setFrom('tunooapp@gmail.com', 'TUNO APP');
             $mail->addAddress($user['mail']);
-
             $mail->isHTML(true);
             $mail->Subject = 'Reset de contrasenya';
             $resetLink = "http://localhost/projectePHP2/web/resetPassword.php?code=$resetCode&mail=" . urlencode($user['mail']);
